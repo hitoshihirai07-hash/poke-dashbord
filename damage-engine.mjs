@@ -8,7 +8,7 @@ function pokemon(p,row,names){
  const name=names.species[p.species], s=name&&gen.species.get(toID(name));if(!s||!row)throw Error('「'+p.species+'」の計算用データがありません。');
  const keys=['hp','atk','def','spa','spd','spe'],cols=['HP','攻撃','防御','特攻','特防','素早'];if(!keys.every((k,i)=>s.baseStats[k]===Number(row[cols[i]]))||[...s.types].sort().join('|')!==[types[row['タイプ1']],types[row['タイプ2']]].filter(Boolean).sort().join('|'))throw Error(p.species+'のCSVと計算エンジンの種族値・タイプが一致しません。');
  if(!validPoints(p.points))throw Error('能力ポイントが不正です。');if(!natures[p.nature])throw Error('能力補正を選択してください。');
- const ability=translate(p.ability,names.abilities,gen.abilities,'特性'),item=translate(p.item,names.items,gen.items,'持ち物');
+ const ability=translate(p.ability,names.abilities,gen.abilities,'特性'),item=p.item?.trim()?translate(p.item.trim(),names.items,gen.items,'持ち物'):undefined;
  const result=new Pokemon(gen,name,{nature:natures[p.nature],ability:ability||'No Ability',item,evs:Object.fromEntries(keys.map((k,i)=>[k,p.points[i]])),status:p.status||'',boosts:p.boosts||{},curHP:p.curHP||undefined,abilityOn:!!p.abilityOn});
  if(p.curHP&&(!Number.isInteger(p.curHP)||p.curHP<1||p.curHP>result.maxHP()))throw Error(p.species+'の現在HPは1〜'+result.maxHP()+'で指定してください。');
  return result;

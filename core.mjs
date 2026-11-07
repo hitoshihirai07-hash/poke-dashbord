@@ -2,6 +2,8 @@ export function stats(base, points, nature=[1,1,1,1,1]) {
   return base.map((v,i)=>i===0 ? (Number(v)===1?1:Math.floor((2*Number(v)+31)/2)+Number(points[i])+60) : Math.floor((Math.floor((2*Number(v)+31)/2)+Number(points[i])+5)*nature[i-1]));
 }
 export function validPoints(p){return Array.isArray(p)&&p.length===6&&p.every(x=>Number.isInteger(x)&&x>=0&&x<=32)&&p.reduce((a,b)=>a+b,0)<=66}
+export function abilityOptions(row){return [...new Set(['とくせい1','とくせい2','かくれとくせい'].map(k=>row?.[k]?.trim()).filter(Boolean))]}
+export function setSpecies(p,name,row){if(p.species!==name){p.species=name;p.ability=abilityOptions(row)[0]||''}return p}
 export function damage({level=50,power,attack,defense,stab=1,effectiveness=1}){
  const base=Math.floor(Math.floor(Math.floor((Math.floor(level*2/5)+2)*power*attack/defense)/50)+2);
  return Array.from({length:16},(_,i)=>Math.floor(Math.floor(Math.floor(base*(85+i)/100)*stab)*effectiveness));
